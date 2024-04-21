@@ -50,8 +50,13 @@ extension MainModel: MainModelInput {
         
         if let data = try? Data(contentsOf: url) {
             
-            dataService.write(image: data, for: urlString)
-            output.imageDataDidLoad(for: indexPath)
+            //dataService.write(image: data, for: urlString)
+            //output.imageDataDidLoad(for: indexPath)
+            
+            DispatchQueue.main.async {
+                self.dataService.write(image: data, for: urlString)
+                self.output.imageDataDidLoad(for: indexPath)
+            }
         }
     }
 }
