@@ -48,14 +48,23 @@ extension MainModel: MainModelInput {
         
         guard let url = URL(string: urlString) else { return }
         
+        /*
         if let data = try? Data(contentsOf: url) {
             
-            //dataService.write(image: data, for: urlString)
-            //output.imageDataDidLoad(for: indexPath)
+            dataService.write(image: data, for: urlString)
+            output.imageDataDidLoad(for: indexPath)
+        }
+         */
+        
+        DispatchQueue.global(qos: .default).async { [weak self] in
+            guard let self = self else { return }
             
-            DispatchQueue.main.async {
-                self.dataService.write(image: data, for: urlString)
-                self.output.imageDataDidLoad(for: indexPath)
+            if let data = try? Data(contentsOf: url) {
+                
+                DispatchQueue.main.async {
+                    self.dataService.write(image: data, for: urlString)
+                    self.output.imageDataDidLoad(for: indexPath)
+                }
             }
         }
     }
